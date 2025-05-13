@@ -1,7 +1,7 @@
 <!-- Untuk mencari data makanan berdasarakan makanan -->
 <?php
 // search_library.php
-require_once __DIR__ . '/../../koneksi.php';
+require_once __DIR__ . '../../config/koneksi.php';
 
 header("Content-Type: application/json");
 

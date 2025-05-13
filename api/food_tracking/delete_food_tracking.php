@@ -1,5 +1,5 @@
 <?php
-require_once '../../koneksi.php';
+require_once '../../config/koneksi.php';
 // require_once '../../token/auth.php';
 
 header('Content-Type: application/json');

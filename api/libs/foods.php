@@ -1,7 +1,7 @@
 <!-- Menampilkan data makanan -->
 <?php
 header('Content-Type: application/json');
-include '../koneksi.php';
+include '../../config/koneksi.php';
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {

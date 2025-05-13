@@ -5,6 +5,12 @@ login
     "email": "ilham111@example.com",
     "password": "adminilham11"
 }
+{
+    "id": "1",
+    "name": "Kaiden",
+    "email": "kaiden1@example.com",
+    "password": "adminkaiden1"
+}
 
 register
 {

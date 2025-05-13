@@ -1,38 +1,39 @@
-<!-- Login User -->
 <?php
-require_once __DIR__ . '/../../koneksi.php';
-require_once __DIR__ . '/../../token/jwt_helper.php';
-require_once __DIR__ . '/../../token/auth.php'; // Pastikan ini ada untuk memanggil fungsi auth
+session_start();
+require_once __DIR__ . '../../config/koneksi.php';
 
-header('Content-Type: application/json');
+// Cek apakah method adalah POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['message' => 'Invalid request method']);
+    exit();
+}
 
+// Mendapatkan koneksi database
+$conn = getConnection();
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (isset($data['email'], $data['password'])) {
-    $email = $data['email'];
-    $password = $data['password'];
-
-    $stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($row = $result->fetch_assoc()) {
-        if (password_verify($password, $row['password'])) {
-            $payload = [
-                "user_id" => $row['id'],
-                "email" => $email,
-                "exp" => time() + (60 * 60 * 24) // token berlaku 1 hari
-            ];
-            $token = generate_jwt($payload);
-            echo json_encode(["token" => $token]);
-        } else {
-            echo json_encode(["error" => "Invalid password"]);
-        }
-    } else {
-        echo json_encode(["error" => "User not found"]);
-    }
-} else {
-    echo json_encode(["error" => "Missing email or password"]);
+// Validasi input
+if (empty($data['email']) || empty($data['password'])) {
+    echo json_encode(['message' => 'Email and Password are required']);
+    exit();
 }
-?>
+
+// Ambil data user dari database
+$stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
+$stmt->execute([':email' => $data['email']]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Verifikasi password
+if ($user && password_verify($data['password'], $user['password'])) {
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['user_name'] = $user['name'];
+    
+    echo json_encode([
+        'message' => 'Login successful',
+        'user' => [
+            'name' => $user['name'],    
+        ]
+    ]);
+} else {
+    echo json_encode(['message' => 'Invalid email or password']);
+}

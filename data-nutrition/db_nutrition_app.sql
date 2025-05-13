@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2025 at 04:41 AM
+-- Generation Time: May 11, 2025 at 07:52 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,21 +34,6 @@ CREATE TABLE `activities` (
   `duration_minutes` int(11) NOT NULL,
   `calories_burned` int(11) NOT NULL,
   `activity_date` date NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `exercises`
---
-
-CREATE TABLE `exercises` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `duration` int(11) DEFAULT NULL,
-  `calories_burned` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1459,9 +1444,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
-(2, 'Kaiden Test', 'kaiden1@example.com', '$2y$10$testhash1'),
-(3, 'Sarah', 'sarah@example.com', '$2y$10$testhash2'),
-(4, 'Budi', 'budi@example.com', '$2y$10$testhash3');
+(7, 'Ilham', 'ilham111@example.com', '$2y$10$AaC6AV6XKplgaAkxOZYrTuEIQLJ/u5vcdmcEfoQc7hTADIX1lW9Ee');
 
 --
 -- Indexes for dumped tables
@@ -1472,13 +1455,6 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
 --
 ALTER TABLE `activities`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `exercises`
---
-ALTER TABLE `exercises`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `food_tracking`
@@ -1511,12 +1487,6 @@ ALTER TABLE `activities`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `exercises`
---
-ALTER TABLE `exercises`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `food_tracking`
 --
 ALTER TABLE `food_tracking`
@@ -1532,17 +1502,11 @@ ALTER TABLE `nutrition_library`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `exercises`
---
-ALTER TABLE `exercises`
-  ADD CONSTRAINT `exercises_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `food_tracking`

@@ -1,11 +1,21 @@
 <!-- CRUD aktivitas olahraga -->
 <?php
-require_once __DIR__ . '/../../koneksi.php';
+session_start();
+require_once __DIR__ . '../../config/koneksi.php';
+
+// valodasi login user
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['message' => 'Unauthorized']);
+    exit();
+}
+
+// Mendapatkan koneksi database
+$conn = getConnection();
+$user_id = $_SESSION['user_id'];
 
 // Mendapatkan method request
 $method = $_SERVER['REQUEST_METHOD'];
 
-try {
     switch ($method) {
         // Get all activities or a specific activity
         case 'GET':
@@ -16,7 +26,7 @@ try {
                 echo json_encode($activity ? $activity : ['message' => 'Activity not found']);
             } else {
                 $stmt = $conn->query("SELECT * FROM activities ORDER BY created_at DESC");
-                echo json_encode($stmt->fetch_assoc(PDO::FETCH_ASSOC));
+                echo json_encode($stmt->fetch_all(PDO::FETCH_ASSOC));
             }
             break;
 
@@ -45,7 +55,7 @@ try {
 
         // Update activity
         case 'PUT':
-            if (!isset($_GET['id'])) {
+            if (!isset($_GET['user_id'])) {
                 echo json_encode(['message' => 'ID not provided']);
                 exit();
             }
@@ -76,21 +86,24 @@ try {
 
         // Delete activity
         case 'DELETE':
-            if (!isset($_GET['id'])) {
-                echo json_encode(['message' => 'ID not provided']);
-                exit();
-            }
+                // Mendapatkan ID dari parameter URL
+                if (!isset($_GET['id'])) {
+                    echo json_encode(['message' => 'ID is required for delete']);
+                    exit();
+                }
 
-            $stmt = $conn->prepare("DELETE FROM activities WHERE id = :id");
-            $stmt->execute([':id' => (int)$_GET['id']]);
-            echo json_encode(['message' => 'Activity deleted successfully']);
-            break;
+                // Menghapus aktivitas
+                $stmt = $conn->prepare("DELETE FROM activities WHERE id = :id AND user_id = :user_id");
+                $stmt->execute([
+                    ':id' => (int)$_GET['id'],
+                    ':user_id' => $user_id
+                ]);
 
-        default:
-            echo json_encode(['message' => 'Invalid request method']);
-            break;
-    }
-} catch (PDOException $e) {
-    echo json_encode(['message' => 'Database error: ' . $e->getMessage()]);
+                echo json_encode(['message' => 'Activity deleted successfully']);
+                break;
+
+            default:
+                echo json_encode(['message' => 'Invalid request method']);
+                break;
 }
 ?>

@@ -1,6 +1,7 @@
-<<<<<<< HEAD
-This is my first mobile app project called KloroFit, KloroFit is about tracking your nutrtition and your workout progress, including run or walking. It will make your diet perfectly all tracked.
+This is my first mobile app project called KloroFit, KloroFit is about tracking your nutrtition and your workout progress, including run or walking. It will make your diet perfectly all tracked. 
+Project Progress --> Creating REST API  
 =======
+
 <!-- checkbox test rest api -->
 ## 🔥 API Endpoint Summary
 
@@ -20,4 +21,3 @@ This is my first mobile app project called KloroFit, KloroFit is about tracking 
 | GET | /api/user/user_profile_view/ | Menampilkan profile user |
 
 ---
->>>>>>> test1

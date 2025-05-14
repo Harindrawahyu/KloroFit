@@ -1,0 +1,36 @@
+login
+{
+    "id": "7",
+    "name": "Ilham",
+    "email": "ilham111@example.com",
+    "password": "adminilham11"
+}
+{
+    "id": "1",
+    "name": "Kaiden",
+    "email": "kaiden1@example.com",
+    "password": "adminkaiden1"
+}
+
+register
+{
+    "name": "nama",
+    "email": "email@example.com",
+    "password": "password"
+}
+
+CRUD_food_tracking
+{
+    "food_id": 1,
+    "quantity": 2,
+    "date": "2025-05-07"
+}
+
+activity_tracking
+{
+    "user_id": 1,
+    "name": "Jogging",
+    "duration_minutes": 30,
+    "calories_burned": 300,
+    "activity_date": "2025-05-10"
+}

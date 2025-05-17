@@ -19,12 +19,16 @@ register
     "password": "password"
 }
 
-CRUD_food_tracking
+POST food_tracking
 {
-    "food_id": 1,
-    "quantity": 2,
-    "date": "2025-05-07"
+    "food_name": "Boiled Egg",
+    "calories": 80,
+    "protein": 6,
+    "fat": 5,
+    "carbs": 1,
+    "consumed_at": "2025-05-17"
 }
+
 
 activity_tracking
 {

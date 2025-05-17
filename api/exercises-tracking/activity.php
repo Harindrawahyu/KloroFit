@@ -1,7 +1,7 @@
 <?php
+session_start();
 // koneksi database
 require_once __DIR__ . '../../config/koneksi.php';
-session_start();
 
 // Cek apakah user sudah login
 if (!isset($_SESSION['user_id'])) {

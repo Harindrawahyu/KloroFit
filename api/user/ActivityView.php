@@ -1,27 +1,22 @@
-<!-- Menampilkan data aktivitas olahraga -->
 <?php
-require_once __DIR__ . '/../../koneksi.php';
-// require_once __DIR__ . '/../../token/auth.php'; // Pastikan ini ada untuk memanggil fungsi auth
+session_start();
+
+// Validasi user login
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['status' => 'error', 'message' => 'Unauthorized access']);
+    exit();
+}
+
+// Koneksi ke database
+require_once __DIR__ . '../../config/koneksi.php';
+
+// Set header response JSON
 header('Content-Type: application/json');
-$method = $_SERVER['REQUEST_METHOD'];
-
-if ($method === 'GET') {
-    $user_id = $_GET['user_id'];
-    $result = $conn->query("SELECT * FROM exercises WHERE user_id = $user_id");
-    $data = [];
-    while ($row = $result->fetch_assoc()) {
-        $data[] = $row;
-    }
-    echo json_encode($data);
+$conn = getConnection();
+if (!$conn) {
+    http_response_code(500);
+    echo json_encode(['status' => 'error', 'message' => 'Database connection failed']);
+    exit();
 }
 
-if ($method === 'POST') {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $sql = "INSERT INTO exercises (name, duration, calories_burned, user_id)
-            VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("siii", $data['name'], $data['duration'],
-                      $data['calories_burned'], $data['user_id']);
-    $stmt->execute();
-    echo json_encode(["message" => "Aktivitas ditambahkan"]);
-}

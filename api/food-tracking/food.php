@@ -1,8 +1,9 @@
 <?php
 session_start();
 
-// Cek apakah user sudah login
+// Validasi user login
 if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
     echo json_encode(['status' => 'error', 'message' => 'Unauthorized access']);
     exit();
 }
@@ -14,6 +15,7 @@ require_once __DIR__ . '../../config/koneksi.php';
 header('Content-Type: application/json');
 $conn = getConnection();
 if (!$conn) {
+    http_response_code(500);
     echo json_encode(['status' => 'error', 'message' => 'Database connection failed']);
     exit();
 }
@@ -30,8 +32,17 @@ if ($method === 'GET' && isset($_GET['q'])) {
         $stmt->execute();
 
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($results)) {
+            http_response_code(404);
+            echo json_encode(['status' => 'error', 'massage' => 'Data not found']);
+            exit();
+        }
+        http_response_code(200);
         echo json_encode(['status' => 'success', 'data' => $results]);
+        
     } catch (Exception $e) {
+        http_response_code(500);
         echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
     }
     exit();
@@ -47,12 +58,21 @@ switch ($method) {
         $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (empty($data)) {
+            http_response_code(404);
+            echo json_encode(['status' => 'error', 'massage' => 'Data Kosong']);
+            exit();
+        }
+        
+        http_response_code(200);
         echo json_encode(['status' => 'success', 'data' => $data]);
         break;
 
     case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
         if (!isset($data['food_id'], $data['quantity'])) {
+            http_response_code(400);
             echo json_encode(['message' => 'Incomplete data']);
             exit();
         }
@@ -64,6 +84,7 @@ switch ($method) {
             ':food_id' => $data['food_id'],
             ':quantity' => $data['quantity']
         ]);
+        http_response_code(201);
         echo json_encode(['status' => 'success', 'message' => 'Food tracked successfully']);
         break;
 
@@ -74,13 +95,16 @@ switch ($method) {
             $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
             $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
             $stmt->execute();
+            http_response_code(200);
             echo json_encode(['status' => 'success', 'message' => 'Food data deleted successfully']);
         } else {
+            http_response_code(400);
             echo json_encode(['status' => 'error', 'message' => 'ID is required']);
         }
         break;
 
     default:
+        http_response_code(405);
         echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

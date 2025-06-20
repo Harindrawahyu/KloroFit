@@ -1,6 +1,6 @@
-KloroFit - Nutrition & Workout Tracker 🚀
+KloroFit - Nutrition & Workout Tracker api 🚀
 =======
-KloroFit is my first mobile application project designed to help you track your nutrition and workout progress, including running and walking. This app ensures that all aspects of your diet and fitness are perfectly recorded. 
+This is KloroFit api
 
 📌 Project Status
 
